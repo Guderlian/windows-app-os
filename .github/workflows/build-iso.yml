@@ -1,21 +1,53 @@
+name: Build Linux ISO
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
+          sudo apt-get update
+          sudo apt-get install -y live-build rsync
+
       - name: Build ISO
         run: |
-          # 先列出当前目录文件，方便调试查看路径
-          ls -R
+          # 1. 明确使用绝对路径定义变量
+          PROJECT_ROOT=$GITHUB_WORKSPACE
           
-          # 确保回到根目录
-          cd $GITHUB_WORKSPACE
-          
-          # 使用绝对路径或者确认目录结构
+          # 2. 检查脚本是否存在
+          if [ ! -f "$PROJECT_ROOT/build-scripts/chroot-setup.sh" ]; then
+            echo "错误：找不到 chroot-setup.sh，请检查文件夹名是否为 build-scripts"
+            ls -R $PROJECT_ROOT
+            exit 1
+          fi
+
+          # 3. 准备构建目录
           mkdir -p config/hooks/normal
+          cp "$PROJECT_ROOT/build-scripts/chroot-setup.sh" config/hooks/normal/
           
-          # 尝试直接复制，如果还报错，说明文件夹名真的不叫 build-scripts
-          cp build-scripts/chroot-setup.sh config/hooks/normal/
-          
-          # (后续步骤保持不变...)
           mkdir -p config/includes.chroot/opt/windows-app-os
-          rsync -av --exclude='.git' --exclude='.github' ./ config/includes.chroot/opt/windows-app-os/
+          # 同步项目文件
+          rsync -av --exclude='.git' --exclude='.github' --exclude='build-scripts' $PROJECT_ROOT/ config/includes.chroot/opt/windows-app-os/
+          
+          # 4. 执行构建
           cd config
           sudo lb config
           sudo lb build
-          mv live-image-amd64.hybrid.iso ../windows-app-os.iso
+          
+          # 5. 将生成的镜像复制到根目录以便后续上传
+          mv live-image-amd64.hybrid.iso $PROJECT_ROOT/windows-app-os.iso
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-app-os-iso
+          path: windows-app-os.iso
