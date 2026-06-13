@@ -1,0 +1,166 @@
+﻿/* ─── Windows App OS ─ Start Menu ───────────────────────────────────── */
+/* Flyout start menu with search, pinned apps, and power controls     */
+
+#start-menu {
+  position: fixed;
+  bottom: calc(var(--taskbar-height) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 580px;
+  max-height: 560px;
+  background: var(--bg-elevated);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  z-index: 1100;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  animation: slideUp var(--duration-normal) var(--ease-out);
+}
+#start-menu.open {
+  display: flex;
+}
+
+/* ── Search bar ────────────────────────────────────────────────────── */
+.start-search {
+  padding: 16px 20px 8px;
+}
+.start-search input {
+  width: 100%;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-default);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+.start-search input:focus {
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.08);
+}
+.start-search input::placeholder {
+  color: var(--text-dim);
+}
+
+/* ── Pinned apps section ───────────────────────────────────────────── */
+.start-section-title {
+  padding: 12px 20px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-dim);
+}
+.start-pinned {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4px 0;
+  padding: 4px 16px 8px;
+}
+.start-pinned-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 11px;
+}
+.start-pinned-item:hover {
+  background: var(--bg-hover);
+}
+.start-pinned-item .pinned-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* ── Bottom bar (power / user) ─────────────────────────────────────── */
+.start-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  border-top: 1px solid var(--border-subtle);
+  margin-top: auto;
+}
+.start-footer-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: all var(--duration-fast) var(--ease-out);
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+}
+.start-footer-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.start-footer-btn.power-btn:hover {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--danger);
+}
+
+/* ── Power menu sub-flyout ─────────────────────────────────────────── */
+#power-menu {
+  position: absolute;
+  bottom: 56px;
+  left: 20px;
+  background: var(--bg-elevated);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  width: 180px;
+  padding: 4px;
+  display: none;
+  z-index: 1200;
+  animation: slideUp var(--duration-fast) var(--ease-out);
+}
+#power-menu.open {
+  display: block;
+}
+.power-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+}
+.power-menu-item:hover {
+  background: var(--bg-hover);
+}
+.power-menu-item.danger:hover {
+  background: rgba(255, 107, 107, 0.15);
+}

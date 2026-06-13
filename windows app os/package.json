@@ -1,0 +1,22 @@
+﻿{
+  "name": "windows-app-os",
+  "version": "0.1.0",
+  "description": "A minimal Windows 11-like desktop environment built on Debian Live + Openbox + Electron",
+  "main": "main.js",
+  "license": "MIT",
+  "author": "",
+  "scripts": {
+    "start": "electron .",
+    "start:dev": "electron . --dev"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^33.0.0"
+  },
+  "electron": {
+    "linux": {
+      "target": "dir",
+      "icon": "src/renderer/assets/icons/icon.png"
+    }
+  }
+}

@@ -1,0 +1,170 @@
+﻿/* ─── Windows App OS ─ Taskbar ──────────────────────────────────────── */
+/* Bottom taskbar: acrylic bar with centered apps, system tray on right  */
+
+#taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--taskbar-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 20, 35, 0.78);
+  backdrop-filter: var(--blur-medium);
+  -webkit-backdrop-filter: var(--blur-medium);
+  border-top: 1px solid var(--border-subtle);
+  z-index: 1000;
+}
+
+/* ── Start button ─────────────────────────────────────────────────── */
+#taskbar-start {
+  position: absolute;
+  left: 8px;
+  width: 42px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 18px;
+}
+#taskbar-start:hover {
+  background: var(--bg-hover);
+}
+#taskbar-start:active,
+#taskbar-start.active {
+  background: var(--bg-active);
+}
+
+/* ── Centered app icons ───────────────────────────────────────────── */
+#taskbar-apps {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+  padding: 4px 0;
+}
+
+.taskbar-app {
+  width: 42px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-out);
+  position: relative;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+.taskbar-app:hover {
+  background: var(--bg-hover);
+}
+.taskbar-app.active {
+  background: var(--bg-active);
+}
+/* Active indicator dot */
+.taskbar-app.active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+/* ── System tray (right) ──────────────────────────────────────────── */
+#taskbar-tray {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+}
+
+.tray-item {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: background var(--duration-fast) var(--ease-out);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+}
+.tray-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+#tray-clock {
+  font-size: 12px;
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+}
+
+#tray-date {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* ── Quick settings popup ─────────────────────────────────────────── */
+#quick-settings {
+  position: fixed;
+  bottom: calc(var(--taskbar-height) + 8px);
+  right: 12px;
+  width: 320px;
+  background: var(--bg-elevated);
+  backdrop-filter: var(--blur-heavy);
+  -webkit-backdrop-filter: var(--blur-heavy);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  z-index: 1100;
+  display: none;
+  animation: slideUp var(--duration-normal) var(--ease-out);
+}
+#quick-settings.open {
+  display: block;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#quick-settings .qs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+#quick-settings .qs-row:last-child {
+  border-bottom: none;
+}
+#quick-settings .qs-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+#quick-settings .qs-value {
+  font-size: 13px;
+  color: var(--text-primary);
+}
