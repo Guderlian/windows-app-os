@@ -1,42 +1,21 @@
-name: Build Linux ISO
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo sed -i 's/archive.ubuntu.com/mirrors.aliyun.com/g' /etc/apt/sources.list
-          sudo apt-get update
-          sudo apt-get install -y live-build rsync
-
       - name: Build ISO
         run: |
+          # 先列出当前目录文件，方便调试查看路径
+          ls -R
+          
+          # 确保回到根目录
+          cd $GITHUB_WORKSPACE
+          
+          # 使用绝对路径或者确认目录结构
           mkdir -p config/hooks/normal
-          # 假设你的钩子脚本在 build-scripts/chroot-setup.sh
+          
+          # 尝试直接复制，如果还报错，说明文件夹名真的不叫 build-scripts
           cp build-scripts/chroot-setup.sh config/hooks/normal/
           
-          # 准备目录并执行构建
+          # (后续步骤保持不变...)
           mkdir -p config/includes.chroot/opt/windows-app-os
           rsync -av --exclude='.git' --exclude='.github' ./ config/includes.chroot/opt/windows-app-os/
-          
           cd config
           sudo lb config
           sudo lb build
-          
-          # 重命名产物
           mv live-image-amd64.hybrid.iso ../windows-app-os.iso
-
-      - name: Upload ISO
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-app-os-iso
-          path: windows-app-os.iso
