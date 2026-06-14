@@ -1,3 +1,4 @@
+set -ex
 name: Build Linux ISO
 
 on:
